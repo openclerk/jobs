@@ -1,0 +1,19 @@
+{
+  "name": "openclerk/jobs",
+  "description": "Simple PHP job queueing, execution and management",
+  "autoload": {
+    "psr-4": {
+      "Openclerk\\Jobs\\": "src",
+      "Openclerk\\Jobs\\Tests\\": "test"
+    }
+  },
+  "require": {
+    "openclerk/config": "dev-master",
+    "openclerk/db": "dev-master",
+    "openclerk/events": "dev-master",
+    "monolog/monolog": "~1.11"
+  },
+  "require-dev": {
+    "soundasleep/component-tests": "dev-master"
+  }
+}
