@@ -47,7 +47,7 @@ class Jobs extends \Db\Migration {
    * Override the default function to check that a table exists.
    * @return true if this migration is applied
    */
-  function isApplied(Connection $db) {
+  function isApplied(\Db\Connection $db) {
     return $this->tableExists($db, "jobs");
   }
 

@@ -5,7 +5,7 @@ namespace Openclerk\Jobs\Migrations;
 /**
  * Represents exceptions that occur when running jobs.
  */
-class JobException extends \Db\Migration {
+class JobExceptions extends \Db\Migration {
 
   /**
    * Apply only the current migration.
