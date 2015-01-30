@@ -108,7 +108,6 @@ abstract class JobRunner {
         "line_number" => $e->getLine(),
       ));
 
-      $logger->info("Failed");
     }
   }
 
