@@ -26,6 +26,6 @@ interface Job {
   /**
    * Callback function for when the job failed. Can do nothing.
    */
-  public function failed(Connection $db, Logger $logger);
+  public function failed(\Exception $e, Connection $db, Logger $logger);
 
 }

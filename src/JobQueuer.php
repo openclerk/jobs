@@ -34,10 +34,35 @@ abstract class JobQueuer {
    * @throws Exception if the job failed
    */
   public function queue(Connection $db, Logger $logger) {
-    $jobs = $this->findJobs();
-    $logger->info("Found " . number_format($jobs) . " job instances to queue");
+    $jobs = $this->findJobs($db, $logger);
+    $logger->info("Found " . number_format(count($jobs)) . " job instances to queue");
 
     foreach ($jobs as $job) {
+      if (!isset($job['job_type'])) {
+        throw new JobQueuerException("Could not insert job " . print_r($job, true) . ": no job_type set");
+      }
+
+      // is there a job for this instance already?
+      $query = "SELECT * FROM jobs WHERE is_executed=0 AND job_type=:job_type";
+      $args = array(
+        "job_type" => $job['job_type'],
+      );
+      if (isset($job['user_id'])) {
+        $query .= " AND user_id=:user_id";
+        $args["user_id"] = $job['user_id'];
+      }
+      if (isset($job['arg_id'])) {
+        $query .= " AND arg_id=:arg_id";
+        $args["arg_id"] = $job['arg_id'];
+      }
+      $q = $db->prepare($query);
+      $q->execute($args);
+      if ($existing = $q->fetch()) {
+        $this->jobQueued($db, $logger, $existing);
+        continue;
+      }
+
+      // insert in the new instance
       $query = "INSERT INTO jobs SET job_type=:job_type";
       $args = array(
         "job_type" => $job['job_type'],
@@ -60,7 +85,7 @@ abstract class JobQueuer {
       }
     }
 
-    $logger->info("Inserted in " . number_format($jobs) . " job instances");
+    $logger->info("Inserted in " . number_format(count($jobs)) . " job instances");
   }
 
 }

@@ -82,6 +82,13 @@ abstract class JobRunner {
     } catch (\Exception $e) {
       $logger->error($e->getMessage());
 
+      // it failed
+      $q = $db->prepare("UPDATE jobs SET is_executing=0, is_error=1, executed_at=NOW() WHERE id=? LIMIT 1");
+      $q->execute(array($job['id']));
+
+      $instance->failed($e, $db, $logger);
+
+      // log exception
       $q = $db->prepare("INSERT INTO job_exceptions SET job_id=:job_id,
         class_name=:class_name,
         message=:message,
@@ -94,13 +101,6 @@ abstract class JobRunner {
         "filename" => $e->getFile(),
         "line_number" => $e->getLine(),
       ));
-      $this->insertException($db, $job, $e);
-
-      // it failed
-      $q = $db->prepare("UPDATE jobs SET is_executing=0, is_error=1, executed_at=NOW() WHERE id=? LIMIT 1");
-      $q->execute(array($job['id']));
-
-      $instance->failed($db, $logger);
 
       $logger->info("Failed");
     }
