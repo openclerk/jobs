@@ -57,7 +57,13 @@ abstract class JobRunner {
    */
   public function runOne(Connection $db, Logger $logger) {
     $job = $this->findJob($db, $logger);
-    $logger->info("Running job " . print_r($job, true));
+
+    if ($job) {
+      $logger->info("Running job " . print_r($job, true));
+    } else {
+      $logger->info("No job to run");
+      return;
+    }
 
     try {
       $instance = $this->createJob($job, $db, $logger);
