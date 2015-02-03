@@ -15,6 +15,10 @@ use \Openclerk\Config;
  */
 abstract class JobRunner {
 
+  function __construct() {
+    // empty
+  }
+
   /**
    * Find the next job that should be executed.
    * By default, just selects any job instance that is in the database that isn't

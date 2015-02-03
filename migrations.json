@@ -1,5 +1,6 @@
 [
   "\\Openclerk\\Jobs\\Migrations\\Jobs",
-  "\\Openclerk\\Jobs\\Migrations\\JobExceptions"
+  "\\Openclerk\\Jobs\\Migrations\\JobExceptions",
+  "\\Openclerk\\Jobs\\Migrations\\JobsJobPrefix"
 ]
 
