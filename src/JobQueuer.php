@@ -43,10 +43,9 @@ abstract class JobQueuer {
       }
 
       // is there a job for this instance already?
-      $query = "SELECT * FROM jobs WHERE is_executed=0 AND job_type=:job_type, job_prefix=:job_prefix";
+      $query = "SELECT * FROM jobs WHERE is_executed=0 AND job_type=:job_type";
       $args = array(
         "job_type" => $job['job_type'],
-        "job_prefix" => self::getJobPrefix($job['job_type']),
       );
       if (isset($job['user_id'])) {
         $query .= " AND user_id=:user_id";
@@ -64,9 +63,10 @@ abstract class JobQueuer {
       }
 
       // insert in the new instance
-      $query = "INSERT INTO jobs SET job_type=:job_type";
+      $query = "INSERT INTO jobs SET job_type=:job_type, job_prefix=:job_prefix";
       $args = array(
         "job_type" => $job['job_type'],
+        "job_prefix" => self::getJobPrefix($job['job_type']),
       );
       if (isset($job['user_id'])) {
         $query .= ", user_id=:user_id";

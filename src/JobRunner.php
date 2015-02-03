@@ -41,9 +41,16 @@ abstract class JobRunner {
       }
     }
 
-    $q = $db->prepare("SELECT * FROM jobs WHERE is_executed=0 AND is_executing=0 AND is_error=0 LIMIT 1");
+    $q = $db->prepare("SELECT * FROM jobs WHERE " . $this->defaultFindJobQuery() . " LIMIT 1");
     $q->execute();
     return $q->fetch();
+  }
+
+  /**
+   * @return "is_executed=0 AND is_executing=0 AND is_error=0"
+   */
+  final function defaultFindJobQuery() {
+    return "is_executed=0 AND is_executing=0 AND is_error=0";
   }
 
   /**
