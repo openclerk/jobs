@@ -30,12 +30,12 @@ abstract class JobRunner {
 
     // mark all repeatedly failing jobs as failing
     $execution_limit = Config::get("job_execution_limit", 5);
-    $q = $db->prepare("SELECT * FROM jobs WHERE is_executed=0 AND is_executing=0 AND is_error=0 AND execution_count >= ?");
+    $q = $db->prepare("SELECT * FROM jobs WHERE is_executed=0 AND is_executing=0 AND execution_count >= ?");
     $q->execute(array($execution_limit));
     if ($failed = $q->fetchAll()) {
       $logger->info("Found " . number_format(count($failed)) . " jobs that have executed too many times ($execution_limit)");
       foreach ($failed as $f) {
-        $q = $db->prepare("UPDATE jobs SET is_error=1 WHERE id=?");
+        $q = $db->prepare("UPDATE jobs SET is_executed=1,is_error=1 WHERE id=?");
         $q->execute(array($f['id']));
         $logger->info("Marked job " . $f['id'] . " as failed");
       }
@@ -50,7 +50,7 @@ abstract class JobRunner {
    * @return "is_executed=0 AND is_executing=0 AND is_error=0"
    */
   final function defaultFindJobQuery() {
-    return "is_executed=0 AND is_executing=0 AND is_error=0";
+    return "is_executed=0 AND is_executing=0";
   }
 
   /**
