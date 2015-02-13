@@ -39,23 +39,27 @@ use \Monolog\Logger;
 
 class MyJob implements Job {
 
+  /**
+   * @param $job the `job` instance, an array of `job_type`, `arg_id` and optionally `user_id`
+   */
   function __construct($job) {
     $this->job = $job;
   }
 
   function run(Connection $db, Logger $logger) {
-    // do something
-    if (false) {
-      throw new \Exception("Job failed");
+    $q = $db->prepare("SELECT * FROM table WHERE id=?");
+    $q->execute(array($this->job['arg_id']));
+    if (!$q->fetch()) {
+      throw new \Exception("Could not find that instance");
     }
   }
 
   function passed(Connection $db, Logger $logger) {
-    // the job passed
+    // (optional) the job passed
   }
 
   function failed(\Exception $runtime_exception, Connection $db, Logger $logger) {
-    // the job failed
+    // (optional) the job failed
   }
 }
 ```
