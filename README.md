@@ -1,4 +1,4 @@
-openclerk/jobs
+openclerk/jobs [![Build Status](https://travis-ci.org/openclerk/jobs.svg)](https://travis-ci.org/openclerk/jobs)
 ==============
 
 A library for simple PHP job queueing, execution and management,
