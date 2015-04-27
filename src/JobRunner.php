@@ -41,6 +41,14 @@ abstract class JobRunner {
       }
     }
 
+    // find first a job that has zero execution count
+    $q = $db->prepare("SELECT * FROM jobs WHERE " . $this->defaultFindJobQuery() . " AND execution_count=0 LIMIT 1");
+    $q->execute();
+    if ($job = $q->fetch()) {
+      return $job;
+    }
+
+    // or, any job
     $q = $db->prepare("SELECT * FROM jobs WHERE " . $this->defaultFindJobQuery() . " LIMIT 1");
     $q->execute();
     return $q->fetch();
