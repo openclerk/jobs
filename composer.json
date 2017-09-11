@@ -8,9 +8,9 @@
     }
   },
   "require": {
-    "openclerk/config": "dev-master",
-    "openclerk/db": "dev-master",
-    "openclerk/events": "dev-master",
+    "openclerk/config": "^0.1",
+    "openclerk/db": "^0.1",
+    "openclerk/events": "^0.2",
     "monolog/monolog": "~1.11"
   },
   "require-dev": {
